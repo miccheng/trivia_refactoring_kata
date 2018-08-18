@@ -133,10 +133,10 @@ module.exports = function Game() {
 
   this.wrongAnswer = () => {
     const player = currentPlayer()
+    player.inPenaltyBox = true
 
     console.log("Question was incorrectly answered")
     console.log(`${player.name} was sent to the penalty box`)
-    player.inPenaltyBox = true
 
     nextPlayer()
     return true
