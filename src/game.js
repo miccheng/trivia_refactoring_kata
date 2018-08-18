@@ -82,24 +82,17 @@ module.exports = function Game() {
     console.log(`They have rolled a ${roll}`)
 
     if (player.inPenaltyBox) {
-      if (roll % 2 != 0) {
-        isGettingOutOfPenaltyBox = true
+      isGettingOutOfPenaltyBox = roll % 2 != 0
 
-        console.log(
-          `${player.name} is getting out of the penalty box`
-        )
-        movePlayer(player, roll)
-        askQuestion(currentCategory())
-      } else {
-        console.log(
-          `${player.name} is not getting out of the penalty box`
-        )
-        isGettingOutOfPenaltyBox = false
-      }
-    } else {
-      movePlayer(player, roll)
-      askQuestion(currentCategory())
+      console.log(
+        `${player.name} is ${isGettingOutOfPenaltyBox ? '' : 'not '}getting out of the penalty box`
+      )
+
+      if (!isGettingOutOfPenaltyBox) return
     }
+
+    movePlayer(player, roll)
+    askQuestion(currentCategory())
   }
 
   this.wasCorrectlyAnswered = () => {
