@@ -102,33 +102,22 @@ module.exports = function Game() {
     if (player.inPenaltyBox) {
       if (isGettingOutOfPenaltyBox) {
         console.log("Answer was correct!!!!")
-        player.purse += 1
-
-        console.log(
-          `${player.name} now has ${player.purse} Gold Coins.`
-        )
+        rewardPlayer(player)
 
         const winner = didPlayerWin()
-        currentPlayerInTurn += 1
-        if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
+        nextPlayer()
 
         return winner
       } else {
-        currentPlayerInTurn += 1
-        if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
+        nextPlayer()
         return true
       }
     } else {
       console.log("Answer was correct!!!!")
-      player.purse += 1
-
-      console.log(
-        `${player.name} now has ${player.purse} Gold Coins.`
-      )
+      rewardPlayer(player)
 
       const winner = didPlayerWin()
-      currentPlayerInTurn += 1
-      if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
+      nextPlayer()
 
       return winner
     }
@@ -141,8 +130,20 @@ module.exports = function Game() {
     console.log(`${player.name} was sent to the penalty box`)
     player.inPenaltyBox = true
 
+    nextPlayer()
+    return true
+  }
+
+  const nextPlayer = () => {
     currentPlayerInTurn += 1
     if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
-    return true
+  }
+
+  const rewardPlayer = (player) => {
+    player.purse += 1
+
+    console.log(
+      `${player.name} now has ${player.purse} Gold Coins.`
+    )
   }
 }
