@@ -3,7 +3,6 @@ const Player = require("./player");
 
 module.exports = function Game() {
   const players = []
-  const places = []
   const purses = []
   const inPenaltyBox = []
 
@@ -25,7 +24,7 @@ module.exports = function Game() {
 
   const currentCategory = () => {
     const allPlaces = ["Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock"]
-    const currentPlace = places[currentPlayerInTurn]
+    const currentPlace = currentPlayer().place
 
     return allPlaces[currentPlace]
   }
@@ -38,7 +37,6 @@ module.exports = function Game() {
     const newPlayer = new Player(playerName)
 
     players.push(newPlayer)
-    places[this.howManyPlayers() - 1] = 0
     purses[this.howManyPlayers() - 1] = 0
     inPenaltyBox[this.howManyPlayers() - 1] = false
 
@@ -53,6 +51,7 @@ module.exports = function Game() {
   }
 
   const askQuestion = (category) => {
+    console.log(`The category is ${category}`)
     console.log(
       questions.askQuestion(category)
     )
@@ -72,6 +71,7 @@ module.exports = function Game() {
           `${player.name} is getting out of the penalty box`
         )
         movePlayer(player, roll)
+        askQuestion(currentCategory())
       } else {
         console.log(
           `${player.name} is not getting out of the penalty box`
@@ -80,18 +80,17 @@ module.exports = function Game() {
       }
     } else {
       movePlayer(player, roll)
+      askQuestion(currentCategory())
     }
   }
 
   const movePlayer = (player, roll) => {
-    places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
+    const newPlace = getNewPosition(player.place, roll)
+    player.setPlace(newPlace)
 
     console.log(
-      `${player.name}'s new location is ${places[currentPlayerInTurn]}`
+      `${player.name}'s new location is ${player.place}`
     )
-    const category = currentCategory()
-    console.log(`The category is ${category}`)
-    askQuestion(category)
   }
 
   const getNewPosition = (fromPosition, rolled) => {
