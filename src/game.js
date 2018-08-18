@@ -12,16 +12,20 @@ module.exports = function Game() {
   const categories = ["Pop", "Science", "Sports", "Rock"]
   const questions = new Questions(categories, numQuestions)
 
-  let currentPlayer = 0
+  let currentPlayerInTurn = 0
   let isGettingOutOfPenaltyBox = false
 
+  const currentPlayer = () => {
+    return players[currentPlayerInTurn]
+  }
+
   const didPlayerWin = () => {
-    return !(purses[currentPlayer] == 6)
+    return !(purses[currentPlayerInTurn] == 6)
   }
 
   const currentCategory = () => {
     const allPlaces = ["Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock"]
-    const currentPlace = places[currentPlayer]
+    const currentPlace = places[currentPlayerInTurn]
 
     return allPlaces[currentPlace]
   }
@@ -55,35 +59,37 @@ module.exports = function Game() {
   }
 
   this.roll = (roll) => {
-    console.log(`${players[currentPlayer].name} is the current player`)
+    const player = currentPlayer()
+
+    console.log(`${player.name} is the current player`)
     console.log(`They have rolled a ${roll}`)
 
-    if (inPenaltyBox[currentPlayer]) {
+    if (inPenaltyBox[currentPlayerInTurn]) {
       if (roll % 2 != 0) {
         isGettingOutOfPenaltyBox = true
 
         console.log(
-          `${players[currentPlayer].name} is getting out of the penalty box`
+          `${player.name} is getting out of the penalty box`
         )
-        places[currentPlayer] = getNewPosition(places[currentPlayer], roll)
+        places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
 
         console.log(
-          `${players[currentPlayer].name}'s new location is ${places[currentPlayer]}`
+          `${player.name}'s new location is ${places[currentPlayerInTurn]}`
         )
         const category = currentCategory()
         console.log(`The category is ${category}`)
         askQuestion(category)
       } else {
         console.log(
-          `${players[currentPlayer].name} is not getting out of the penalty box`
+          `${player.name} is not getting out of the penalty box`
         )
         isGettingOutOfPenaltyBox = false
       }
     } else {
-      places[currentPlayer] = getNewPosition(places[currentPlayer], roll)
+      places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
 
       console.log(
-        `${players[currentPlayer].name}'s new location is ${places[currentPlayer]}`
+        `${player.name}'s new location is ${places[currentPlayerInTurn]}`
       )
       const category = currentCategory()
       console.log(`The category is ${category}`)
@@ -99,48 +105,52 @@ module.exports = function Game() {
   }
 
   this.wasCorrectlyAnswered = () => {
-    if (inPenaltyBox[currentPlayer]) {
+    const player = currentPlayer()
+
+    if (inPenaltyBox[currentPlayerInTurn]) {
       if (isGettingOutOfPenaltyBox) {
         console.log("Answer was correct!!!!")
-        purses[currentPlayer] += 1
+        purses[currentPlayerInTurn] += 1
         console.log(
-          `${players[currentPlayer].name} now has ${purses[currentPlayer]} Gold Coins.`
+          `${player.name} now has ${purses[currentPlayerInTurn]} Gold Coins.`
         )
 
         const winner = didPlayerWin()
-        currentPlayer += 1
-        if (currentPlayer == players.length) currentPlayer = 0
+        currentPlayerInTurn += 1
+        if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
 
         return winner
       } else {
-        currentPlayer += 1
-        if (currentPlayer == players.length) currentPlayer = 0
+        currentPlayerInTurn += 1
+        if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
         return true
       }
     } else {
       console.log("Answer was correct!!!!")
 
-      purses[currentPlayer] += 1
+      purses[currentPlayerInTurn] += 1
       console.log(
-        `${players[currentPlayer].name} now has ${purses[currentPlayer]} Gold Coins.`
+        `${player.name} now has ${purses[currentPlayerInTurn]} Gold Coins.`
       )
 
       const winner = didPlayerWin()
 
-      currentPlayer += 1
-      if (currentPlayer == players.length) currentPlayer = 0
+      currentPlayerInTurn += 1
+      if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
 
       return winner
     }
   }
 
   this.wrongAnswer = () => {
-    console.log("Question was incorrectly answered")
-    console.log(`${players[currentPlayer].name} was sent to the penalty box`)
-    inPenaltyBox[currentPlayer] = true
+    const player = currentPlayer()
 
-    currentPlayer += 1
-    if (currentPlayer == players.length) currentPlayer = 0
+    console.log("Question was incorrectly answered")
+    console.log(`${player.name} was sent to the penalty box`)
+    inPenaltyBox[currentPlayerInTurn] = true
+
+    currentPlayerInTurn += 1
+    if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
     return true
   }
 }
