@@ -1,4 +1,5 @@
 const Questions = require("./questions");
+const Player = require("./player");
 
 module.exports = function Game() {
   const players = []
@@ -6,6 +7,7 @@ module.exports = function Game() {
   const purses = []
   const inPenaltyBox = []
 
+  const totalPlaces = 12
   const numQuestions = 50
   const categories = ["Pop", "Science", "Sports", "Rock"]
   const questions = new Questions(categories, numQuestions)
@@ -29,7 +31,9 @@ module.exports = function Game() {
   }
 
   this.add = (playerName) => {
-    players.push(playerName)
+    const newPlayer = new Player(playerName)
+
+    players.push(newPlayer)
     places[this.howManyPlayers() - 1] = 0
     purses[this.howManyPlayers() - 1] = 0
     inPenaltyBox[this.howManyPlayers() - 1] = false
@@ -51,7 +55,7 @@ module.exports = function Game() {
   }
 
   this.roll = (roll) => {
-    console.log(`${players[currentPlayer]} is the current player`)
+    console.log(`${players[currentPlayer].name} is the current player`)
     console.log(`They have rolled a ${roll}`)
 
     if (inPenaltyBox[currentPlayer]) {
@@ -59,38 +63,39 @@ module.exports = function Game() {
         isGettingOutOfPenaltyBox = true
 
         console.log(
-          `${players[currentPlayer]} is getting out of the penalty box`
+          `${players[currentPlayer].name} is getting out of the penalty box`
         )
-        places[currentPlayer] = places[currentPlayer] + roll
-        if (places[currentPlayer] > 11) {
-          places[currentPlayer] = places[currentPlayer] - 12
-        }
+        places[currentPlayer] = getNewPosition(places[currentPlayer], roll)
 
         console.log(
-          `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
+          `${players[currentPlayer].name}'s new location is ${places[currentPlayer]}`
         )
         const category = currentCategory()
         console.log(`The category is ${category}`)
         askQuestion(category)
       } else {
         console.log(
-          `${players[currentPlayer]} is not getting out of the penalty box`
+          `${players[currentPlayer].name} is not getting out of the penalty box`
         )
         isGettingOutOfPenaltyBox = false
       }
     } else {
-      places[currentPlayer] = places[currentPlayer] + roll
-      if (places[currentPlayer] > 11) {
-        places[currentPlayer] = places[currentPlayer] - 12
-      }
+      places[currentPlayer] = getNewPosition(places[currentPlayer], roll)
 
       console.log(
-        `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
+        `${players[currentPlayer].name}'s new location is ${places[currentPlayer]}`
       )
       const category = currentCategory()
       console.log(`The category is ${category}`)
       askQuestion(category)
     }
+  }
+
+  const getNewPosition = (fromPosition, rolled) => {
+    let newPostion = fromPosition + rolled
+    if (newPostion > (totalPlaces - 1)) newPostion -= totalPlaces
+
+    return newPostion
   }
 
   this.wasCorrectlyAnswered = () => {
@@ -99,7 +104,7 @@ module.exports = function Game() {
         console.log("Answer was correct!!!!")
         purses[currentPlayer] += 1
         console.log(
-          `${players[currentPlayer]} now has ${purses[currentPlayer]} Gold Coins.`
+          `${players[currentPlayer].name} now has ${purses[currentPlayer]} Gold Coins.`
         )
 
         const winner = didPlayerWin()
@@ -117,7 +122,7 @@ module.exports = function Game() {
 
       purses[currentPlayer] += 1
       console.log(
-        `${players[currentPlayer]} now has ${purses[currentPlayer]} Gold Coins.`
+        `${players[currentPlayer].name} now has ${purses[currentPlayer]} Gold Coins.`
       )
 
       const winner = didPlayerWin()
@@ -131,7 +136,7 @@ module.exports = function Game() {
 
   this.wrongAnswer = () => {
     console.log("Question was incorrectly answered")
-    console.log(`${players[currentPlayer]} was sent to the penalty box`)
+    console.log(`${players[currentPlayer].name} was sent to the penalty box`)
     inPenaltyBox[currentPlayer] = true
 
     currentPlayer += 1
