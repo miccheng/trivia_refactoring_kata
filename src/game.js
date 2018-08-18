@@ -1,13 +1,14 @@
+const Questions = require("./questions");
+
 module.exports = function Game() {
   const players = []
   const places = []
   const purses = []
   const inPenaltyBox = []
 
-  const popQuestions = []
-  const scienceQuestions = []
-  const sportsQuestions = []
-  const rockQuestions = []
+  const numQuestions = 50
+  const categories = ["Pop", "Science", "Sports", "Rock"]
+  const questions = new Questions(categories, numQuestions)
 
   let currentPlayer = 0
   let isGettingOutOfPenaltyBox = false
@@ -21,17 +22,6 @@ module.exports = function Game() {
     const currentPlace = places[currentPlayer]
 
     return allPlaces[currentPlace]
-  }
-
-  this.createRockQuestion = (index) => {
-    return `Rock Question ${index}`
-  }
-
-  for (let i = 0; i < 50; i++) {
-    popQuestions.push(`Pop Question ${i}`)
-    scienceQuestions.push(`Science Question ${i}`)
-    sportsQuestions.push(`Sports Question ${i}`)
-    rockQuestions.push(this.createRockQuestion(i))
   }
 
   this.isPlayable = (howManyPlayers) => {
@@ -55,10 +45,7 @@ module.exports = function Game() {
   }
 
   const askQuestion = () => {
-    if (currentCategory() == "Pop") console.log(popQuestions.shift())
-    if (currentCategory() == "Science") console.log(scienceQuestions.shift())
-    if (currentCategory() == "Sports") console.log(sportsQuestions.shift())
-    if (currentCategory() == "Rock") console.log(rockQuestions.shift())
+    console.log(questions.questions[currentCategory()].shift())
   }
 
   this.roll = (roll) => {
