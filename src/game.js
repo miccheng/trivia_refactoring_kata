@@ -5,6 +5,7 @@ module.exports = function Game() {
   const players = []
   let boardPlaces
 
+  const winningScore = 6
   const totalPlaces = 12
   const numQuestions = 50
   const categories = ["Pop", "Science", "Sports", "Rock"]
@@ -18,7 +19,7 @@ module.exports = function Game() {
   }
 
   const didPlayerWin = () => {
-    return !(currentPlayer().purse == 6)
+    return !(currentPlayer().purse == winningScore)
   }
 
   const allPlaces = () => {
