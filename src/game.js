@@ -1,156 +1,150 @@
 module.exports = function Game() {
-  const players = [];
-  const places = [];
-  const purses = [];
-  const inPenaltyBox = [];
+  const players = []
+  const places = []
+  const purses = []
+  const inPenaltyBox = []
 
-  const popQuestions = [];
-  const scienceQuestions = [];
-  const sportsQuestions = [];
-  const rockQuestions = [];
+  const popQuestions = []
+  const scienceQuestions = []
+  const sportsQuestions = []
+  const rockQuestions = []
 
-  let currentPlayer = 0;
-  let isGettingOutOfPenaltyBox = false;
+  let currentPlayer = 0
+  let isGettingOutOfPenaltyBox = false
 
-  const didPlayerWin = function() {
-    return !(purses[currentPlayer] == 6);
-  };
+  const didPlayerWin = () => {
+    return !(purses[currentPlayer] == 6)
+  }
 
-  const currentCategory = function() {
+  const currentCategory = () => {
     const allPlaces = ["Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock"]
     const currentPlace = places[currentPlayer]
 
     return allPlaces[currentPlace]
-  };
-
-  this.createRockQuestion = function(index) {
-    return "Rock Question " + index;
-  };
-
-  for (let i = 0; i < 50; i++) {
-    popQuestions.push("Pop Question " + i);
-    scienceQuestions.push("Science Question " + i);
-    sportsQuestions.push("Sports Question " + i);
-    rockQuestions.push(this.createRockQuestion(i));
   }
 
-  this.isPlayable = function(howManyPlayers) {
-    return howManyPlayers >= 2;
-  };
+  this.createRockQuestion = (index) => {
+    return `Rock Question ${index}`
+  }
 
-  this.add = function(playerName) {
-    players.push(playerName);
-    places[this.howManyPlayers() - 1] = 0;
-    purses[this.howManyPlayers() - 1] = 0;
-    inPenaltyBox[this.howManyPlayers() - 1] = false;
+  for (let i = 0; i < 50; i++) {
+    popQuestions.push(`Pop Question ${i}`)
+    scienceQuestions.push(`Science Question ${i}`)
+    sportsQuestions.push(`Sports Question ${i}`)
+    rockQuestions.push(this.createRockQuestion(i))
+  }
 
-    console.log(playerName + " was added");
-    console.log("They are player number " + players.length);
+  this.isPlayable = (howManyPlayers) => {
+    return howManyPlayers >= 2
+  }
 
-    return true;
-  };
+  this.add = (playerName) => {
+    players.push(playerName)
+    places[this.howManyPlayers() - 1] = 0
+    purses[this.howManyPlayers() - 1] = 0
+    inPenaltyBox[this.howManyPlayers() - 1] = false
 
-  this.howManyPlayers = function() {
-    return players.length;
-  };
+    console.log(`${playerName} was added`)
+    console.log(`They are player number ${players.length}`)
 
-  const askQuestion = function() {
-    if (currentCategory() == "Pop") console.log(popQuestions.shift());
-    if (currentCategory() == "Science") console.log(scienceQuestions.shift());
-    if (currentCategory() == "Sports") console.log(sportsQuestions.shift());
-    if (currentCategory() == "Rock") console.log(rockQuestions.shift());
-  };
+    return true
+  }
 
-  this.roll = function(roll) {
-    console.log(players[currentPlayer] + " is the current player");
-    console.log("They have rolled a " + roll);
+  this.howManyPlayers = () => {
+    return players.length
+  }
+
+  const askQuestion = () => {
+    if (currentCategory() == "Pop") console.log(popQuestions.shift())
+    if (currentCategory() == "Science") console.log(scienceQuestions.shift())
+    if (currentCategory() == "Sports") console.log(sportsQuestions.shift())
+    if (currentCategory() == "Rock") console.log(rockQuestions.shift())
+  }
+
+  this.roll = (roll) => {
+    console.log(`${players[currentPlayer]} is the current player`)
+    console.log(`They have rolled a ${roll}`)
 
     if (inPenaltyBox[currentPlayer]) {
       if (roll % 2 != 0) {
-        isGettingOutOfPenaltyBox = true;
+        isGettingOutOfPenaltyBox = true
 
         console.log(
-          players[currentPlayer] + " is getting out of the penalty box"
-        );
-        places[currentPlayer] = places[currentPlayer] + roll;
+          `${players[currentPlayer]} is getting out of the penalty box`
+        )
+        places[currentPlayer] = places[currentPlayer] + roll
         if (places[currentPlayer] > 11) {
-          places[currentPlayer] = places[currentPlayer] - 12;
+          places[currentPlayer] = places[currentPlayer] - 12
         }
 
         console.log(
-          players[currentPlayer] + "'s new location is " + places[currentPlayer]
-        );
-        console.log("The category is " + currentCategory());
-        askQuestion();
+          `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
+        )
+        console.log(`The category is ${currentCategory()}`)
+        askQuestion()
       } else {
         console.log(
-          players[currentPlayer] + " is not getting out of the penalty box"
-        );
-        isGettingOutOfPenaltyBox = false;
+          `${players[currentPlayer]} is not getting out of the penalty box`
+        )
+        isGettingOutOfPenaltyBox = false
       }
     } else {
-      places[currentPlayer] = places[currentPlayer] + roll;
+      places[currentPlayer] = places[currentPlayer] + roll
       if (places[currentPlayer] > 11) {
-        places[currentPlayer] = places[currentPlayer] - 12;
+        places[currentPlayer] = places[currentPlayer] - 12
       }
 
       console.log(
-        players[currentPlayer] + "'s new location is " + places[currentPlayer]
-      );
-      console.log("The category is " + currentCategory());
-      askQuestion();
+        `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
+      )
+      console.log(`The category is ${currentCategory()}`)
+      askQuestion()
     }
-  };
+  }
 
-  this.wasCorrectlyAnswered = function() {
+  this.wasCorrectlyAnswered = () => {
     if (inPenaltyBox[currentPlayer]) {
       if (isGettingOutOfPenaltyBox) {
-        console.log("Answer was correct!!!!");
-        purses[currentPlayer] += 1;
+        console.log("Answer was correct!!!!")
+        purses[currentPlayer] += 1
         console.log(
-          players[currentPlayer] +
-            " now has " +
-            purses[currentPlayer] +
-            " Gold Coins."
-        );
+          `${players[currentPlayer]} now has ${purses[currentPlayer]} Gold Coins.`
+        )
 
-        const winner = didPlayerWin();
-        currentPlayer += 1;
-        if (currentPlayer == players.length) currentPlayer = 0;
+        const winner = didPlayerWin()
+        currentPlayer += 1
+        if (currentPlayer == players.length) currentPlayer = 0
 
-        return winner;
+        return winner
       } else {
-        currentPlayer += 1;
-        if (currentPlayer == players.length) currentPlayer = 0;
-        return true;
+        currentPlayer += 1
+        if (currentPlayer == players.length) currentPlayer = 0
+        return true
       }
     } else {
-      console.log("Answer was correct!!!!");
+      console.log("Answer was correct!!!!")
 
-      purses[currentPlayer] += 1;
+      purses[currentPlayer] += 1
       console.log(
-        players[currentPlayer] +
-          " now has " +
-          purses[currentPlayer] +
-          " Gold Coins."
-      );
+        `${players[currentPlayer]} now has ${purses[currentPlayer]} Gold Coins.`
+      )
 
-      const winner = didPlayerWin();
+      const winner = didPlayerWin()
 
-      currentPlayer += 1;
-      if (currentPlayer == players.length) currentPlayer = 0;
+      currentPlayer += 1
+      if (currentPlayer == players.length) currentPlayer = 0
 
-      return winner;
+      return winner
     }
-  };
+  }
 
-  this.wrongAnswer = function() {
-    console.log("Question was incorrectly answered");
-    console.log(players[currentPlayer] + " was sent to the penalty box");
-    inPenaltyBox[currentPlayer] = true;
+  this.wrongAnswer = () => {
+    console.log("Question was incorrectly answered")
+    console.log(`${players[currentPlayer]} was sent to the penalty box`)
+    inPenaltyBox[currentPlayer] = true
 
-    currentPlayer += 1;
-    if (currentPlayer == players.length) currentPlayer = 0;
-    return true;
-  };
-};
+    currentPlayer += 1
+    if (currentPlayer == players.length) currentPlayer = 0
+    return true
+  }
+}
