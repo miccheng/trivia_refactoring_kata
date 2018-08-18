@@ -71,14 +71,7 @@ module.exports = function Game() {
         console.log(
           `${player.name} is getting out of the penalty box`
         )
-        places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
-
-        console.log(
-          `${player.name}'s new location is ${places[currentPlayerInTurn]}`
-        )
-        const category = currentCategory()
-        console.log(`The category is ${category}`)
-        askQuestion(category)
+        movePlayer(player, roll)
       } else {
         console.log(
           `${player.name} is not getting out of the penalty box`
@@ -86,15 +79,19 @@ module.exports = function Game() {
         isGettingOutOfPenaltyBox = false
       }
     } else {
-      places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
-
-      console.log(
-        `${player.name}'s new location is ${places[currentPlayerInTurn]}`
-      )
-      const category = currentCategory()
-      console.log(`The category is ${category}`)
-      askQuestion(category)
+      movePlayer(player, roll)
     }
+  }
+
+  const movePlayer = (player, roll) => {
+    places[currentPlayerInTurn] = getNewPosition(places[currentPlayerInTurn], roll)
+
+    console.log(
+      `${player.name}'s new location is ${places[currentPlayerInTurn]}`
+    )
+    const category = currentCategory()
+    console.log(`The category is ${category}`)
+    askQuestion(category)
   }
 
   const getNewPosition = (fromPosition, rolled) => {
