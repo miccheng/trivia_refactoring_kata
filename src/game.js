@@ -3,6 +3,7 @@ const Player = require("./player");
 
 module.exports = function Game() {
   const players = []
+  let boardPlaces
 
   const totalPlaces = 12
   const numQuestions = 50
@@ -20,11 +21,23 @@ module.exports = function Game() {
     return !(currentPlayer().purse == 6)
   }
 
-  const currentCategory = () => {
-    const allPlaces = ["Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock", "Pop", "Science", "Sports", "Rock"]
-    const currentPlace = currentPlayer().place
+  const allPlaces = () => {
+    if (typeof(boardPlaces) != 'undefined') return boardPlaces
 
-    return allPlaces[currentPlace]
+    boardPlaces = []
+    let categoryID = 0
+    for(let i = 0; i < totalPlaces; i++) {
+      if (categoryID == categories.length) categoryID = 0
+
+      boardPlaces[i] = categories[categoryID]
+      categoryID += 1
+    }
+
+    return boardPlaces
+  }
+
+  const currentCategory = () => {
+    return allPlaces()[currentPlayer().place]
   }
 
   const askQuestion = (category) => {
