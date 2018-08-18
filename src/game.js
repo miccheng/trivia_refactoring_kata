@@ -99,28 +99,18 @@ module.exports = function Game() {
   this.wasCorrectlyAnswered = () => {
     const player = currentPlayer()
 
-    if (player.inPenaltyBox) {
-      if (isGettingOutOfPenaltyBox) {
-        console.log("Answer was correct!!!!")
-        rewardPlayer(player)
-
-        const winner = didPlayerWin()
-        nextPlayer()
-
-        return winner
-      } else {
-        nextPlayer()
-        return true
-      }
-    } else {
-      console.log("Answer was correct!!!!")
-      rewardPlayer(player)
-
-      const winner = didPlayerWin()
+    if (player.inPenaltyBox && !isGettingOutOfPenaltyBox) {
       nextPlayer()
-
-      return winner
+      return true
     }
+
+    console.log("Answer was correct!!!!")
+    rewardPlayer(player)
+
+    const winner = didPlayerWin()
+    nextPlayer()
+
+    return winner
   }
 
   this.wrongAnswer = () => {
