@@ -76,10 +76,6 @@ module.exports = function Game() {
     )
   }
 
-  this.isPlayable = (howManyPlayers) => {
-    return howManyPlayers >= 2
-  }
-
   this.add = (playerName) => {
     const newPlayer = new Player(playerName)
 
@@ -89,10 +85,6 @@ module.exports = function Game() {
     console.log(`They are player number ${players.length}`)
 
     return true
-  }
-
-  this.howManyPlayers = () => {
-    return players.length
   }
 
   this.roll = (roll) => {
