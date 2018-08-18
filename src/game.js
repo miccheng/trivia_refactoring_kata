@@ -3,7 +3,6 @@ const Player = require("./player");
 
 module.exports = function Game() {
   const players = []
-  const inPenaltyBox = []
 
   const totalPlaces = 12
   const numQuestions = 50
@@ -36,7 +35,6 @@ module.exports = function Game() {
     const newPlayer = new Player(playerName)
 
     players.push(newPlayer)
-    inPenaltyBox[this.howManyPlayers() - 1] = false
 
     console.log(`${playerName} was added`)
     console.log(`They are player number ${players.length}`)
@@ -61,7 +59,7 @@ module.exports = function Game() {
     console.log(`${player.name} is the current player`)
     console.log(`They have rolled a ${roll}`)
 
-    if (inPenaltyBox[currentPlayerInTurn]) {
+    if (player.inPenaltyBox) {
       if (roll % 2 != 0) {
         isGettingOutOfPenaltyBox = true
 
@@ -101,7 +99,7 @@ module.exports = function Game() {
   this.wasCorrectlyAnswered = () => {
     const player = currentPlayer()
 
-    if (inPenaltyBox[currentPlayerInTurn]) {
+    if (player.inPenaltyBox) {
       if (isGettingOutOfPenaltyBox) {
         console.log("Answer was correct!!!!")
         player.purse += 1
@@ -141,7 +139,7 @@ module.exports = function Game() {
 
     console.log("Question was incorrectly answered")
     console.log(`${player.name} was sent to the penalty box`)
-    inPenaltyBox[currentPlayerInTurn] = true
+    player.inPenaltyBox = true
 
     currentPlayerInTurn += 1
     if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0

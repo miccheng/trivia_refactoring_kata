@@ -11,10 +11,6 @@ class Player {
   setPlace(newPlace) {
     this.place = newPlace
   }
-
-  setInPenaltyBox(status) {
-    this.inPenaltyBox = status
-  }
 }
 
 module.exports = Player
