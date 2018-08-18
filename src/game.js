@@ -1,15 +1,17 @@
 const Questions = require("./questions");
 const Player = require("./player");
+const Board = require("./board");
 
 module.exports = function Game() {
   const players = []
-  let boardPlaces
 
   const winningScore = 6
   const totalPlaces = 12
   const numQuestions = 50
   const categories = ["Pop", "Science", "Sports", "Rock"]
+
   const questions = new Questions(categories, numQuestions)
+  const gameBoard = new Board(categories, totalPlaces).prepBoard()
 
   let currentPlayerInTurn = 0
   let isGettingOutOfPenaltyBox = false
@@ -22,23 +24,8 @@ module.exports = function Game() {
     return !(currentPlayer().purse == winningScore)
   }
 
-  const allPlaces = () => {
-    if (typeof(boardPlaces) != 'undefined') return boardPlaces
-
-    boardPlaces = []
-    let categoryID = 0
-    for(let i = 0; i < totalPlaces; i++) {
-      if (categoryID == categories.length) categoryID = 0
-
-      boardPlaces[i] = categories[categoryID]
-      categoryID += 1
-    }
-
-    return boardPlaces
-  }
-
   const currentCategory = () => {
-    return allPlaces()[currentPlayer().place]
+    return gameBoard.categoryAtPosition(currentPlayer().place)
   }
 
   const askQuestion = (category) => {
