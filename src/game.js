@@ -27,6 +27,42 @@ module.exports = function Game() {
     return allPlaces[currentPlace]
   }
 
+  const askQuestion = (category) => {
+    console.log(`The category is ${category}`)
+    console.log(
+      questions.askQuestion(category)
+    )
+  }
+
+  const movePlayer = (player, roll) => {
+    const newPlace = getNewPosition(player.place, roll)
+    player.setPlace(newPlace)
+
+    console.log(
+      `${player.name}'s new location is ${player.place}`
+    )
+  }
+
+  const getNewPosition = (fromPosition, rolled) => {
+    let newPostion = fromPosition + rolled
+    if (newPostion > (totalPlaces - 1)) newPostion -= totalPlaces
+
+    return newPostion
+  }
+
+  const nextPlayer = () => {
+    currentPlayerInTurn += 1
+    if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
+  }
+
+  const rewardPlayer = (player) => {
+    player.purse += 1
+
+    console.log(
+      `${player.name} now has ${player.purse} Gold Coins.`
+    )
+  }
+
   this.isPlayable = (howManyPlayers) => {
     return howManyPlayers >= 2
   }
@@ -44,13 +80,6 @@ module.exports = function Game() {
 
   this.howManyPlayers = () => {
     return players.length
-  }
-
-  const askQuestion = (category) => {
-    console.log(`The category is ${category}`)
-    console.log(
-      questions.askQuestion(category)
-    )
   }
 
   this.roll = (roll) => {
@@ -80,22 +109,6 @@ module.exports = function Game() {
     }
   }
 
-  const movePlayer = (player, roll) => {
-    const newPlace = getNewPosition(player.place, roll)
-    player.setPlace(newPlace)
-
-    console.log(
-      `${player.name}'s new location is ${player.place}`
-    )
-  }
-
-  const getNewPosition = (fromPosition, rolled) => {
-    let newPostion = fromPosition + rolled
-    if (newPostion > (totalPlaces - 1)) newPostion -= totalPlaces
-
-    return newPostion
-  }
-
   this.wasCorrectlyAnswered = () => {
     const player = currentPlayer()
 
@@ -122,18 +135,5 @@ module.exports = function Game() {
 
     nextPlayer()
     return true
-  }
-
-  const nextPlayer = () => {
-    currentPlayerInTurn += 1
-    if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
-  }
-
-  const rewardPlayer = (player) => {
-    player.purse += 1
-
-    console.log(
-      `${player.name} now has ${player.purse} Gold Coins.`
-    )
   }
 }
