@@ -21,7 +21,9 @@ class Questions {
     return questions
   }
 
-
+  askQuestion(category) {
+    return this.questions[category].shift()
+  }
 }
 
 module.exports = Questions

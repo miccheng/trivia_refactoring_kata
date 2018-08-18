@@ -44,8 +44,10 @@ module.exports = function Game() {
     return players.length
   }
 
-  const askQuestion = () => {
-    console.log(questions.questions[currentCategory()].shift())
+  const askQuestion = (category) => {
+    console.log(
+      questions.askQuestion(category)
+    )
   }
 
   this.roll = (roll) => {
@@ -67,8 +69,9 @@ module.exports = function Game() {
         console.log(
           `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
         )
-        console.log(`The category is ${currentCategory()}`)
-        askQuestion()
+        const category = currentCategory()
+        console.log(`The category is ${category}`)
+        askQuestion(category)
       } else {
         console.log(
           `${players[currentPlayer]} is not getting out of the penalty box`
@@ -84,8 +87,9 @@ module.exports = function Game() {
       console.log(
         `${players[currentPlayer]}'s new location is ${places[currentPlayer]}`
       )
-      console.log(`The category is ${currentCategory()}`)
-      askQuestion()
+      const category = currentCategory()
+      console.log(`The category is ${category}`)
+      askQuestion(category)
     }
   }
 
