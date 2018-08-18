@@ -3,7 +3,6 @@ const Player = require("./player");
 
 module.exports = function Game() {
   const players = []
-  const purses = []
   const inPenaltyBox = []
 
   const totalPlaces = 12
@@ -19,7 +18,7 @@ module.exports = function Game() {
   }
 
   const didPlayerWin = () => {
-    return !(purses[currentPlayerInTurn] == 6)
+    return !(currentPlayer().purse == 6)
   }
 
   const currentCategory = () => {
@@ -37,7 +36,6 @@ module.exports = function Game() {
     const newPlayer = new Player(playerName)
 
     players.push(newPlayer)
-    purses[this.howManyPlayers() - 1] = 0
     inPenaltyBox[this.howManyPlayers() - 1] = false
 
     console.log(`${playerName} was added`)
@@ -106,9 +104,10 @@ module.exports = function Game() {
     if (inPenaltyBox[currentPlayerInTurn]) {
       if (isGettingOutOfPenaltyBox) {
         console.log("Answer was correct!!!!")
-        purses[currentPlayerInTurn] += 1
+        player.purse += 1
+
         console.log(
-          `${player.name} now has ${purses[currentPlayerInTurn]} Gold Coins.`
+          `${player.name} now has ${player.purse} Gold Coins.`
         )
 
         const winner = didPlayerWin()
@@ -123,14 +122,13 @@ module.exports = function Game() {
       }
     } else {
       console.log("Answer was correct!!!!")
+      player.purse += 1
 
-      purses[currentPlayerInTurn] += 1
       console.log(
-        `${player.name} now has ${purses[currentPlayerInTurn]} Gold Coins.`
+        `${player.name} now has ${player.purse} Gold Coins.`
       )
 
       const winner = didPlayerWin()
-
       currentPlayerInTurn += 1
       if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
 

@@ -12,10 +12,6 @@ class Player {
     this.place = newPlace
   }
 
-  setPurse(newPurse) {
-    this.purse = newPurse
-  }
-
   setInPenaltyBox(status) {
     this.inPenaltyBox = status
   }
