@@ -3,7 +3,11 @@ const Questions = require("../src/questions");
 describe("Questions", () => {
   const categories = ["Pop", "Science", "Sports", "Rock"]
   const numQuestions = 10
-  const questions = new Questions(categories, numQuestions)
+  let questions
+
+  beforeEach(() => {
+    questions = new Questions(categories, numQuestions)
+  })
 
   it("prepares questions", () => {
     const questionCategories = questions.questions
