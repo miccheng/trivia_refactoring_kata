@@ -15,7 +15,7 @@ class Questions {
 
   buildQuestions(category) {
     const questions = []
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < this.numQuestions; i++) {
       questions.push(`${category} Question ${i}`)
     }
     return questions
