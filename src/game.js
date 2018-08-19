@@ -8,6 +8,7 @@ module.exports = function Game() {
   const winningScore = 6
   const totalPlaces = 12
   const numQuestions = 50
+  const rewardPerTurn = 1
   const categories = ["Pop", "Science", "Sports", "Rock"]
 
   const questions = new Questions(categories, numQuestions)
@@ -48,8 +49,8 @@ module.exports = function Game() {
     if (currentPlayerInTurn == players.length) currentPlayerInTurn = 0
   }
 
-  const rewardPlayer = (player) => {
-    player.purse += 1
+  const rewardPlayer = (player, coins = 1) => {
+    player.purse += coins
 
     console.log(
       `${player.name} now has ${player.purse} Gold Coins.`
@@ -96,7 +97,7 @@ module.exports = function Game() {
     }
 
     console.log("Answer was correct!!!!")
-    rewardPlayer(player)
+    rewardPlayer(player, rewardPerTurn)
 
     const winner = didPlayerWin()
     nextPlayer()
