@@ -12,48 +12,50 @@ describe("Messages", () => {
   })
 
   it('new player position', () => {
-    const message = messages.playerPosition(player)
+    const message = messages.announce('playerPosition', player)
     expect(message).toEqual(`${playerName}'s new location is ${player.place}`)
   })
 
   it('coin status', () => {
     player.purse = 5
-    const message = messages.purseStatus(player)
+    const message = messages.announce('purseStatus', player)
     expect(message).toEqual(`${playerName} now has ${player.purse} Gold Coins.`)
   })
 
   it('new player added', () => {
-    const message = messages.newPlayerAdded(player)
+    const message = messages.announce(['newPlayerAdded', 'playerNumber'], player)
     expect(message).toEqual([`${playerName} was added`, `They are player number ${playerNumber}`])
   })
 
   it('announce current player', () => {
-    const message = messages.announceCurrentPlayer(player)
+    const message = messages.announce('currentPlayer', player)
     expect(message).toEqual(`${playerName} is the current player`)
   })
 
   it('announces rolled', () => {
     const roll = 5
-    const message = messages.announceRoll(roll)
+    const message = messages.announce('roll', player, roll)
     expect(message).toEqual(`They have rolled a ${roll}`)
   })
 
   it('announces penalty box', () => {
     const isGettingOutOfPenaltyBox = false
-    const message = messages.announcePenaltyStatus(player, isGettingOutOfPenaltyBox)
+    const message = messages.announce('penaltyStatus', player, isGettingOutOfPenaltyBox)
     expect(message).toEqual(`${player.name} is not getting out of the penalty box`)
   })
 
   it('announce answer status', () => {
     let status = true
-    expect(messages.announceAnswerStatus(status)).toEqual("Answer was correct!!!!")
+    let message = messages.announce('answerStatus', player, status)
+    expect(message).toEqual("Answer was correct!!!!")
 
     status = false
-    expect(messages.announceAnswerStatus(status)).toEqual("Question was incorrectly answered")
+    message = messages.announce('answerStatus', player, status)
+    expect(message).toEqual("Question was incorrectly answered")
   })
 
   it('announce in penalty box', () => {
-    const message = messages.playerInPenaltyBox(player)
+    const message = messages.announce('inPenaltyBox', player)
     expect(message).toEqual(`${playerName} was sent to the penalty box`)
   })
 })

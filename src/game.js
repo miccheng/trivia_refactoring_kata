@@ -41,7 +41,7 @@ module.exports = function Game() {
   const movePlayer = (player, roll) => {
     player.place = gameBoard.getNewPosition(player.place, roll)
 
-    messages.playerPosition(player)
+    messages.announce('playerPosition', player)
   }
 
   const nextPlayer = () => {
@@ -52,14 +52,14 @@ module.exports = function Game() {
   const rewardPlayer = (player, coins = 1) => {
     player.purse += coins
 
-    messages.purseStatus(player)
+    messages.announce('purseStatus', player)
   }
 
   this.add = (playerName) => {
     const newPlayer = new Player(playerName, players.length + 1)
     players.push(newPlayer)
 
-    messages.newPlayerAdded(newPlayer)
+    messages.announce(['newPlayerAdded', 'playerNumber'], newPlayer)
 
     return true
   }
@@ -67,13 +67,13 @@ module.exports = function Game() {
   this.roll = (roll) => {
     const player = currentPlayer()
 
-    messages.announceCurrentPlayer(player)
-    messages.announceRoll(roll)
+    messages.announce('currentPlayer', player)
+    messages.announce('roll', player, roll)
 
     if (player.inPenaltyBox) {
       isGettingOutOfPenaltyBox = roll % 2 != 0
 
-      messages.announcePenaltyStatus(player, isGettingOutOfPenaltyBox)
+      messages.announce('penaltyStatus', player, isGettingOutOfPenaltyBox)
 
       if (!isGettingOutOfPenaltyBox) return
     }
@@ -90,7 +90,7 @@ module.exports = function Game() {
       return true
     }
 
-    messages.announceAnswerStatus(true)
+    messages.announce('answerStatus', player, true)
     rewardPlayer(player, rewardPerTurn)
 
     const winner = didPlayerWin()
@@ -103,8 +103,8 @@ module.exports = function Game() {
     const player = currentPlayer()
     player.inPenaltyBox = true
 
-    messages.announceAnswerStatus(false)
-    messages.playerInPenaltyBox(player)
+    messages.announce('answerStatus', player, false)
+    messages.announce('inPenaltyBox', player)
 
     nextPlayer()
     return true
