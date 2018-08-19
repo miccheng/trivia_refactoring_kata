@@ -1,3 +1,5 @@
+'use strict'
+
 class Questions {
   constructor(categories, numQuestions) {
     this.categories = categories
