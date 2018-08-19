@@ -22,6 +22,13 @@ class Board {
   categoryAtPosition(place) {
     return this.boardPlaces[place]
   }
+
+  getNewPosition(fromPosition, rolled) {
+    let newPostion = fromPosition + rolled
+    if (newPostion > (this.totalPlaces - 1)) newPostion -= this.totalPlaces
+
+    return newPostion
+  }
 }
 
 module.exports = Board

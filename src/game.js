@@ -36,19 +36,11 @@ module.exports = function Game() {
   }
 
   const movePlayer = (player, roll) => {
-    const newPlace = getNewPosition(player.place, roll)
-    player.setPlace(newPlace)
+    player.place = gameBoard.getNewPosition(player.place, roll)
 
     console.log(
       `${player.name}'s new location is ${player.place}`
     )
-  }
-
-  const getNewPosition = (fromPosition, rolled) => {
-    let newPostion = fromPosition + rolled
-    if (newPostion > (totalPlaces - 1)) newPostion -= totalPlaces
-
-    return newPostion
   }
 
   const nextPlayer = () => {
