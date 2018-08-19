@@ -1,6 +1,7 @@
 const Questions = require("./questions");
 const Player = require("./player");
 const Board = require("./board");
+const Messages = require("./messages");
 
 module.exports = function Game() {
   const players = []
@@ -13,6 +14,7 @@ module.exports = function Game() {
 
   const questions = new Questions(categories, numQuestions)
   const gameBoard = new Board(categories, totalPlaces).prepBoard()
+  const messages = new Messages({console: true})
 
   let currentPlayerInTurn = 0
   let isGettingOutOfPenaltyBox = false
@@ -39,9 +41,7 @@ module.exports = function Game() {
   const movePlayer = (player, roll) => {
     player.place = gameBoard.getNewPosition(player.place, roll)
 
-    console.log(
-      `${player.name}'s new location is ${player.place}`
-    )
+    messages.playerPosition(player)
   }
 
   const nextPlayer = () => {
@@ -52,18 +52,14 @@ module.exports = function Game() {
   const rewardPlayer = (player, coins = 1) => {
     player.purse += coins
 
-    console.log(
-      `${player.name} now has ${player.purse} Gold Coins.`
-    )
+    messages.purseStatus(player)
   }
 
   this.add = (playerName) => {
-    const newPlayer = new Player(playerName)
-
+    const newPlayer = new Player(playerName, players.length + 1)
     players.push(newPlayer)
 
-    console.log(`${playerName} was added`)
-    console.log(`They are player number ${players.length}`)
+    messages.newPlayerAdded(newPlayer)
 
     return true
   }
@@ -71,15 +67,13 @@ module.exports = function Game() {
   this.roll = (roll) => {
     const player = currentPlayer()
 
-    console.log(`${player.name} is the current player`)
-    console.log(`They have rolled a ${roll}`)
+    messages.announceCurrentPlayer(player)
+    messages.announceRoll(roll)
 
     if (player.inPenaltyBox) {
       isGettingOutOfPenaltyBox = roll % 2 != 0
 
-      console.log(
-        `${player.name} is ${isGettingOutOfPenaltyBox ? '' : 'not '}getting out of the penalty box`
-      )
+      messages.announcePenaltyStatus(player, isGettingOutOfPenaltyBox)
 
       if (!isGettingOutOfPenaltyBox) return
     }
@@ -96,7 +90,7 @@ module.exports = function Game() {
       return true
     }
 
-    console.log("Answer was correct!!!!")
+    messages.announceAnswerStatus(true)
     rewardPlayer(player, rewardPerTurn)
 
     const winner = didPlayerWin()
@@ -109,8 +103,8 @@ module.exports = function Game() {
     const player = currentPlayer()
     player.inPenaltyBox = true
 
-    console.log("Question was incorrectly answered")
-    console.log(`${player.name} was sent to the penalty box`)
+    messages.announceAnswerStatus(false)
+    messages.playerInPenaltyBox(player)
 
     nextPlayer()
     return true
